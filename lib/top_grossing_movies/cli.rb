@@ -1,4 +1,5 @@
 #CLI Controller
+require 'pry'
 class TopGrossingMovies::CLI
 
   def call
