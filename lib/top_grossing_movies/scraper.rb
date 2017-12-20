@@ -1,0 +1,3 @@
+class TopGrossingMovies::Scraper
+
+end
