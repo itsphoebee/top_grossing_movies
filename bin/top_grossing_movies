@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require './lib/top_grossing_movies'
+
+TopGrossingMovies::CLI.new.call

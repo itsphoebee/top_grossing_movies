@@ -1,5 +1,2 @@
-require "top_grossing_movies/version"
-
-module TopGrossingMovies
-  # Your code goes here...
-end
+require_relative "./top_grossing_movies/version"
+require_relative "./top_grossing_movies/cli"
