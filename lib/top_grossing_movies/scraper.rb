@@ -10,14 +10,14 @@ class Scraper
     scraped_movies = []         # create an array to store all the movies
     doc.css("div.lister-item.mode-detail").each do |movie|        #iterate through the content to pull
       scraped_movies << {                                     #add them into the movie array as a hash
-        :name=> movie.css("h3 a").map(&:text),                # movie needs a name
-        :release_year => movie.css("span.lister-item-year.text-muted.unbold").map(&:text), #year
-        :rating =>movie.css("span.certificate").map(&:text),        #rating
-        :sales => movie.css("div.list-description p").map(&:text),  # global box office sales
-        :runtime => movie.css("span.runtime").map(&:text)           # how long the movie runs
+        :rank => movie.css("span.lister-item-index.unbold.text-primary").text.gsub(/\D/,'').to_i, # movie's rank based on sales
+        :name => movie.css("h3 a").text,                # movie needs a name
+        :release_year => movie.css("span.lister-item-year.text-muted.unbold").text.gsub(/\D/,'').to_i, #year
+        :rating => movie.css("span.certificate").text,        #rating
+        :sales => movie.css("div.list-description p").text.gsub(/\D/,'').to_i,  # global box office sales
+        :runtime => movie.css("span.runtime").text           # how long the movie runs
       }
-        end
-
+      end
     scraped_movies                                            #return the array of hashes
   end
 
