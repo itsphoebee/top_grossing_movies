@@ -6,15 +6,22 @@ require 'pry'
 
 class CLI
 
+  def make_movies         #putting everything together
+    scraped_movies = Scraper.scrape_movies      #call Scraper's scrape movie method to receive hash
+    Movie.create_from_hash(scraped_movies)           #use that hash to create new movies
+  end
+
   def call
     puts "Welcome! Here is a list of the top grossing movies worldwide!"
+    make_movies
     list_movies
     menu
   end
 
   def list_movies
-    Movie.all.each_with_index {|movie,index|
-      puts "#{movie.index+1}. #{movie.name} - #{movie.sales}"}
+    Movie.all.each do |movie|
+      puts "1. #{movie.name} #{movie.release_year} - #{movie.sales}"
+    end
   end
 
   def menu
