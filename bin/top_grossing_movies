@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require_relative '../config/environment'
 
-TopGrossingMovies::CLI.new.call
+CLI.new.call

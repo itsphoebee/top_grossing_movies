@@ -1,10 +1,10 @@
 #CLI Controller
-require_relative "../lib/scraper.rb"
-require_relative "../lib/movie.rb"
+require_relative "../top_grossing_movies/scraper.rb"
+require_relative "../top_grossing_movies/movie.rb"
 require 'nokogiri'
 require 'pry'
 
-class TopGrossingMovies::CLI
+class CLI
 
   def call
     puts "Welcome! Here is a list of the top grossing movies worldwide!"
@@ -13,9 +13,8 @@ class TopGrossingMovies::CLI
   end
 
   def list_movies
-    puts "1. Avatar - $2,058,662,225"
-    puts "2. Titanic - $2,208,307,310"
-    puts "3. Star Wars Ep. VII: The Force Awakens - $2,058,662,225"
+    Movie.all.each_with_index {|movie,index|
+      puts "#{movie.index+1}. #{movie.name} - #{movie.sales}"}
   end
 
   def menu

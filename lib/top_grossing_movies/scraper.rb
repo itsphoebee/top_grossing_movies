@@ -1,3 +1,4 @@
+require_relative "../top_grossing_movies/movie.rb"
 require 'open-uri'
 require 'pry'
 require 'nokogiri'
@@ -5,20 +6,22 @@ require 'nokogiri'
 class Scraper
 
   def scrape_movies
-binding.pry
-    doc = Nokogiri::HTML(open("http://www.imdb.com/list/ls000021718/"))
+    doc = Nokogiri::HTML(open("http://www.imdb.com/list/ls000021718/?sort=list_order,asc&st_dt=&mode=detail&page=1&ref_=ttls_vm_dtl"))
     scraped_movies = []
-    doc.css("td").each do |movie|
+    doc.css("div.lister-item.mode-detail").each do |movie|
       scraped_movies << {
-        :name => movie.css("h3 a").text,
-        :release_year => doc.css("span.lister-item-year.text-muted.unbold").text
-        :rating =>doc.css("span.certificate").text
-        :sales => d.css("div.list-description p").text[87..-1] #wip
-        :runtime => d.css("span.runtime").text
-        :genre => d.css("span.genre").text.gsub("\n", " ")
+        :name=> movie.css("h3 a").map(&:text),
+        :release_year => movie.css("span.lister-item-year.text-muted.unbold").map(&:text),
+        :rating =>movie.css("span.certificate").map(&:text),
+        :sales => movie.css("div.list-description p").map(&:text),
+        :runtime => movie.css("span.runtime").map(&:text)
       }
-    end
+        end
     scraped_movies
+  end
+
+  def make_movies
+    Movie.create_from_hash(scraped_movies)
   end
 
 end
