@@ -1,5 +1,9 @@
 #CLI Controller
+require_relative "../lib/scraper.rb"
+require_relative "../lib/movie.rb"
+require 'nokogiri'
 require 'pry'
+
 class TopGrossingMovies::CLI
 
   def call
