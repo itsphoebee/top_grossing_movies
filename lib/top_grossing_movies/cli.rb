@@ -2,6 +2,7 @@
 require_relative "../top_grossing_movies/scraper.rb"
 require_relative "../top_grossing_movies/movie.rb"
 require 'nokogiri'
+require 'colorize'
 require 'pry'
 
 class CLI
@@ -11,37 +12,40 @@ class CLI
     Movie.create_from_hash(scraped_movies)           #use that hash to create new movies
   end
 
+  def display_movie(movie)
+    puts "------------- #{movie.name.upcase} -------------"
+    puts "#{movie.name} had a gross box office sales of $#{movie.sales} worldwide."
+    puts "It was released in #{movie.release_year} and currently ranks number #{movie.rank} on the list out of 50."
+    puts "It has an MPAA rating of #{movie.rating}."
+    puts "Its total runtime is #{movie.runtime}s long."
+    puts "----------------------------------------------"
+    menu
+  end
+
   def call
-    puts "Welcome! Here is a list of the top grossing movies worldwide!"
+    puts "Welcome! Here is a list of the top 50 grossing movies worldwide!"
     make_movies
     list_movies
     menu
   end
 
   def list_movies
-    Movie.all.each do |movie|
-      puts "1. #{movie.name} #{movie.release_year} - #{movie.sales}"
+    Movie.all.sort_by{|movie|movie.rank}.each do |movie|
+      puts "#{movie.rank}. #{movie.name} (#{movie.release_year}) - $#{movie.sales}"
     end
   end
 
   def menu
     puts "Which movie would you like more info on? Input a number or type 'exit' to quit."
-    input = gets.strip.downcase
-    case input
-    when "1"
-        puts "Movie Name: Avatar"
-        puts "Year Released: 2009"
-        puts "Worldwide Box Office Sales: $2,058,662,225"
-        puts "Production Budget: $425,000,000"
-        puts "MPAA Rating: PG-13"
-        puts "Runtime: 162 Minutes"
-        puts "Genre: Action"
-        more
-      when "exit"
-        goodbye
-      else
-        puts "Please enter a number or type 'exit' to quit."
-        menu
+    input = gets.strip
+    if input == 'exit'
+      goodbye
+    elsif input.to_i > 50 || input.to_i <= 0
+      puts "Invalid answer. Please enter an acceptable answer to type 'exit' to quit."
+      menu
+    else
+      movie = Movie.find(input.to_i)
+      display_movie(movie)
     end
   end
 
@@ -61,4 +65,5 @@ class CLI
       goodbye
     end
   end
+
 end

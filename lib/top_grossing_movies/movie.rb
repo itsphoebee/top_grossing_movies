@@ -1,6 +1,6 @@
 require 'pry'
 class Movie
-  attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank
+  attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank,
   @@all = []
 
   def initialize(hash)            #receive a hash of attributes to create a new instance of movie
@@ -16,4 +16,12 @@ class Movie
   def self.all            #call array of stored movies
     @@all
   end
+
+  def self.find(n)
+                          #look into @@all and find movie with rank number n and return that movie
+    self.all.detect {|movie|
+      movie.rank == n.to_i
+    }
+  end
+
 end

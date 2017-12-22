@@ -15,10 +15,10 @@ class Scraper
         :release_year => movie.css("span.lister-item-year.text-muted.unbold").text.gsub(/\D/,'').to_i, #year
         :rating => movie.css("span.certificate").text,        #rating
         :sales => movie.css("div.list-description p").text.gsub(/\D/,'').to_i,  # global box office sales
-        :runtime => movie.css("span.runtime").text           # how long the movie runs
+        :runtime => movie.css("span.runtime").text,           # how long the movie runs
       }
       end
-    scraped_movies                                            #return the array of hashes
+    scraped_movies                                          #return the array of hashes
   end
-
+binding.pry
 end
