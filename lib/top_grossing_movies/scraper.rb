@@ -20,5 +20,5 @@ class Scraper
       end
     scraped_movies                                          #return the array of hashes
   end
-binding.pry
+
 end
