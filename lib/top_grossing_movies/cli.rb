@@ -6,18 +6,24 @@ require 'colorize'
 require 'pry'
 
 class CLI
-BASE_PATH = "www.imdb.com"
 
   def make_movies         #putting everything together
     scraped_movies = Scraper.scrape_movies      #call Scraper's scrape movie method to receive hash
     Movie.create_from_hash(scraped_movies)           #use that hash to create new movies
   end
 
+  def add_movie_attributes_to_movie
+    Movie.all.each do |movie|
+      attributes = Scraper.movie_profile(movie.movie_profile)
+      movie.add_movie_attributes(attributes)
+    end
+  end
+
   def display_movie(movie)
     puts "*********************************** #{movie.name.upcase} ***************************************".colorize(:yellow)
-    puts "#{movie.name} had a gross box office sales of $#{movie.sales} worldwide."
-    puts "It was released in #{movie.release_year} and currently ranks number #{movie.rank} on the list out of 50."
-    puts "It has an MPAA rating of #{movie.rating}."
+    puts "#{movie.name} had a gross box office sales of $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse} worldwide."
+    puts "It was released in #{movie.release_year} and currently ranks ##{movie.rank} on the list out of 50."
+    puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
     puts "Its total runtime is #{movie.runtime}s long."
     puts "*****************************************************************************************".colorize(:yellow)
     menu
@@ -28,6 +34,7 @@ BASE_PATH = "www.imdb.com"
     puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide!".colorize(:color =>:black, :background => :yellow)
     puts "***************************************************************************".colorize(:blue)
     make_movies
+    add_movie_attributes_to_movie
     list_movies
     menu
   end

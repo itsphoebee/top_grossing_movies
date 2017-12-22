@@ -1,6 +1,6 @@
 require 'pry'
 class Movie
-  attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank
+  attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank, :movie_profile, :synopsis, :director, :genre
   @@all = []
 
   def initialize(hash)            #receive a hash of attributes to create a new instance of movie
@@ -23,7 +23,6 @@ class Movie
   end
 
   def add_movie_attributes(hash)
-    hash.each {|key, value| self.send(("#{key}="), value)} 
+    hash.each {|key, value| self.send(("#{key}="), value)}
   end
-
 end
