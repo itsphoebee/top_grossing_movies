@@ -17,11 +17,13 @@ class Movie
     @@all
   end
 
-  def self.find(n)
-                          #look into @@all and find movie with rank number n and return that movie
+  def self.find(n)    #look into @@all and find movie with rank number n and return that movie
     self.all.detect {|movie|
-      movie.rank == n.to_i
-    }
+      movie.rank == n.to_i}
+  end
+
+  def add_movie_attributes(hash)
+    hash.each {|key, value| self.send(("#{key}="), value)} 
   end
 
 end

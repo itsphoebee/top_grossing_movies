@@ -6,6 +6,7 @@ require 'colorize'
 require 'pry'
 
 class CLI
+BASE_PATH = "www.imdb.com"
 
   def make_movies         #putting everything together
     scraped_movies = Scraper.scrape_movies      #call Scraper's scrape movie method to receive hash
