@@ -25,15 +25,16 @@ class Scraper
 
   def self.movie_profile(movie_profile)
     doc = Nokogiri::HTML(open("http://www.imdb.com#{movie_profile}"))
-    scraped_profile = []
+    scraped_profile = {}
     doc.css("div.plot_summary").each do |profile|
-      scraped_profile << {
-        :synopsis => profile.css("div.summary_text").text.gsub("\n","").strip,
-        :director => profile.css("div.summary_text").text.gsub("\n","").strip
-        #WIP  --- :director => profile.css("span.director a span.itemprop").text
-      }
+      scraped_profile[:synopsis] = profile.css("div.summary_text").text.gsub("\n","").strip
     end
     scraped_profile
+  end
+
+  def self.make_movies                                     #putting everything together
+    scraped_movies = Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash
+    Movie.create_from_array(scraped_movies)           #use that hash to create new movies
   end
 
 end

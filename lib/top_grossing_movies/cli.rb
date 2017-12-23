@@ -7,36 +7,9 @@ require 'pry'
 
 class CLI
 
-  def make_movies         #putting everything together
-    scraped_movies = Scraper.scrape_movies      #call Scraper's scrape movie method to receive hash
-    Movie.create_from_hash(scraped_movies)           #use that hash to create new movies
-  end
-
-  def add_movie_attributes_to_movie
-    Movie.all.each do |movie|
-      attributes = Scraper.movie_profile(movie.movie_profile)
-      movie.add_movie_attributes(attributes)
-    end
-  end
-
-  def display_movie(movie)
-    puts "*********************************** #{movie.name.upcase} ***************************************".colorize(:yellow)
-    puts "#{movie.name} had a gross box office sales of $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse} worldwide."
-    puts "It was released in #{movie.release_year} and currently ranks ##{movie.rank} on the list out of 50."
-    puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
-    puts "Its total runtime is #{movie.runtime}s long."
-    puts "*****************************************************************************************".colorize(:yellow)
-    menu
-  end
-
-  def call
-    puts "***************************************************************************".colorize(:blue)
-    puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide!".colorize(:color =>:black, :background => :yellow)
-    puts "***************************************************************************".colorize(:blue)
-    make_movies
-    add_movie_attributes_to_movie
-    list_movies
-    menu
+  def make_movies                                     #putting everything together
+    scraped_movies = Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash
+    Movie.create_from_array(scraped_movies)           #use that hash to create new movies
   end
 
   def list_movies
@@ -59,6 +32,25 @@ class CLI
     end
   end
 
+  def add_movie_synopsis
+    Movie.all.each do |movie|
+      synopsis = Scraper.movie_profile(movie.movie_profile)
+      movie.add_movie_attributes(synopsis)
+    end
+  end
+
+  def display_movie(movie)
+    add_movie_synopsis
+    puts "*********************************** #{movie.name.upcase} ***************************************".colorize(:yellow)
+    puts "#{movie.name} had a gross box office sales of $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse} worldwide."
+    puts "It was released in #{movie.release_year} and currently ranks ##{movie.rank} on the list out of 50."
+    puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
+    puts "Its total runtime is #{movie.runtime}s long."
+    puts "The movie is about: #{movie.synopsis}"
+    puts "*****************************************************************************************".colorize(:yellow)
+    menu
+  end
+
   def goodbye
     puts "See you next time!".colorize(:green)
     exit
@@ -74,6 +66,15 @@ class CLI
     when "n"
       goodbye
     end
+  end
+
+  def call
+    puts "***************************************************************************".colorize(:blue)
+    puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide!".colorize(:color =>:black, :background => :yellow)
+    puts "***************************************************************************".colorize(:blue)
+    make_movies
+    list_movies
+    menu
   end
 
 end
