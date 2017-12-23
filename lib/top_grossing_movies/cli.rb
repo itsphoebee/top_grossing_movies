@@ -27,7 +27,6 @@ class CLI
     end
   end
 
-
   def list_by_year
     puts "Which year do you want to see?"
     input = gets.strip.to_i
@@ -43,9 +42,9 @@ class CLI
   end
 
   def menu
-    puts "Which movie would you like more info on?" .colorize(:green)
-    puts "Input a number (1-50) or type 'exit' to quit.".colorize(:green)
+    puts "Which movie would you like more info on? Input a number (1-50) " .colorize(:green)
     puts "Or if you want to see if there are top grossing movies in a certain year, please type 'search year'".colorize(:green)
+    puts "Or type 'exit' to quit.".colorize(:green)
     input = gets.strip.downcase
     if input == 'exit'
       goodbye
@@ -60,10 +59,16 @@ class CLI
     end
   end
 
-  def add_movie_synopsis                                    #this method takes a long time to load, not sure how to fix...
-    Movie.all.each do |movie|
+  def display_synopsis(movie)
+    puts "Do you want to see the plot summary? y/n".colorize(:green)
+    input = gets.strip
+    case input
+    when "y"
       synopsis = Scraper.movie_profile(movie.movie_profile)
       movie.add_movie_attributes(synopsis)
+      puts "The movie is about: #{movie.synopsis}".colorize(:color => :black, :background => :white)
+    else
+      puts "Okay. Let's move on."
     end
   end
 
@@ -73,26 +78,15 @@ class CLI
     puts "It was released in #{movie.release_year} and ranks ##{movie.rank} on the list out of 50."
     puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
     puts "Its total runtime is #{movie.runtime}s long."
-      if movie.imdb_rating >7.0
-        puts "IMDB rates this movie #{movie.imdb_rating}."
-        puts "That's pretty good! Maybe you should check this movie out.".colorize(:blue)
-        puts "Let me see what this movie is about. Please wait..."
-        add_movie_synopsis
-        puts "The movie is about: #{movie.synopsis}".colorize(:color => :black, :background => :white)
-      else
-        puts "However, IMDB only rates this movie #{movie.imdb_rating}."
-        puts "Maybe you should pass on watching this one.".colorize(:red)
-        puts "Do you want to see the plot summary? y/n".colorize(:green)
-        input = gets.strip
-        case input
-        when "y"
-          puts "Let me see what this movie is about. Please wait..."
-          add_movie_synopsis
-          puts "The movie is about: #{movie.synopsis}".colorize(:color => :black, :background => :white)
-        else
-          puts "Okay. Let's move on."
-        end
-      end
+    if movie.imdb_rating >7.0
+      puts "IMDB rates this movie #{movie.imdb_rating}."
+      puts "That's pretty good! Maybe you should check this movie out.".colorize(:blue)
+      display_synopsis(movie)
+    else
+      puts "However, IMDB only rates this movie #{movie.imdb_rating}."
+      puts "Maybe you should pass on watching this one.".colorize(:red)
+      display_synopsis(movie)
+    end
     puts "*****************************************************************************************".colorize(:yellow)
     more
   end

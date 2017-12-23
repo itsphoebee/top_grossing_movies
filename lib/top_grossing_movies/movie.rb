@@ -21,7 +21,8 @@ class Movie
     self.all.detect {|movie| movie.rank == n.to_i}
   end
 
-  def add_movie_attributes(hash)
-    hash.each {|key, value| self.send(("#{key}="), value)}
+  def add_movie_attributes(desc)
+    self.synopsis = desc
   end
+
 end
