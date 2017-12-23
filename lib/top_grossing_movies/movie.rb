@@ -21,8 +21,9 @@ class Movie
     self.all.detect {|movie| movie.rank == n.to_i}
   end
 
-  def add_movie_attributes(desc)
-    self.synopsis = desc
+  def add_movie_attributes
+    doc = Nokogiri::HTML(open("http://www.imdb.com#{self.movie_profile}"))
+    summary = doc.css("div.plot_summary div.summary_text").text.gsub("\n","").strip
+    self.synopsis = summary
   end
-
 end

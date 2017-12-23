@@ -8,9 +8,9 @@ require 'pry'
 class CLI
 
   def call                                            #starts the program
-    puts "***************************************************************************".colorize(:blue)
+    puts "*****************************************************************************************".colorize(:blue)
     puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide as of 2016!".colorize(:color =>:black, :background => :yellow)
-    puts "***************************************************************************".colorize(:blue)
+    puts "*****************************************************************************************".colorize(:blue)
     make_movies
     list_movies
     menu
@@ -64,8 +64,7 @@ class CLI
     input = gets.strip
     case input
     when "y"
-      synopsis = Scraper.movie_profile(movie.movie_profile)
-      movie.add_movie_attributes(synopsis)
+      movie.add_movie_attributes
       puts "Synopsis: #{movie.synopsis}"
     else
       puts "Okay. Let's move on."
