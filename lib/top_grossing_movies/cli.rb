@@ -66,7 +66,7 @@ class CLI
     when "y"
       synopsis = Scraper.movie_profile(movie.movie_profile)
       movie.add_movie_attributes(synopsis)
-      puts "The movie is about: #{movie.synopsis}".colorize(:color => :black, :background => :white)
+      puts "Synopsis: #{movie.synopsis}"
     else
       puts "Okay. Let's move on."
     end
@@ -76,7 +76,7 @@ class CLI
     puts "*********************************** #{movie.name.upcase} ***************************************".colorize(:yellow)
     puts "#{movie.name} had a gross box office sales of $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse} worldwide."
     puts "It was released in #{movie.release_year} and ranks ##{movie.rank} on the list out of 50."
-    puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
+    puts "It is considered a(n) #{movie.genre} movie and has an MPAA rating of #{movie.rating}."
     puts "Its total runtime is #{movie.runtime}s long."
     if movie.imdb_rating >7.0
       puts "IMDB rates this movie #{movie.imdb_rating}."

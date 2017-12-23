@@ -17,7 +17,7 @@ class Scraper
         :sales => movie.css("div.list-description p").text.gsub(/\D/,'').to_i,
         :runtime => movie.css("span.runtime").text,
         :movie_profile => movie.css("h3.lister-item-header a").attribute("href").value,
-        :genre => movie.css("p.text-muted.text-small span.genre").text.gsub("\n","").strip,
+        :genre => movie.css("p.text-muted.text-small span.genre").text.gsub("\n","").split(/[\s,]+/).join("/").downcase,
         :imdb_rating => movie.css("div.inline-block.ratings-imdb-rating strong").text.to_f
       }
       end
