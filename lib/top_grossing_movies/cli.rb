@@ -9,7 +9,7 @@ class CLI
 
   def call                                            #starts the program
     puts "***************************************************************************".colorize(:blue)
-    puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide!".colorize(:color =>:black, :background => :yellow)
+    puts "  Welcome! Here's a list of the top 50 highest grossing movies worldwide as of 2016!".colorize(:color =>:black, :background => :yellow)
     puts "***************************************************************************".colorize(:blue)
     make_movies
     list_movies
@@ -27,16 +27,30 @@ class CLI
     end
   end
 
+
+  def list_by_year
+    puts "Which year do you want to see?"
+    input = gets.strip.to_i
+    count = 0
+    Movie.all.select do |movie|
+      if movie.release_year == input
+        count += 1
+        puts "#{movie.name} ranks ##{movie.rank} on the list"
+      end
+    end
+    puts "There is/are #{count} movie(s) from that year that made the list."
+    more
+  end
+
   def menu
-    puts "Which movie would you like more info on? Input a number or type 'list' to look at the list again or type 'exit' to quit.".colorize(:green)
-    puts "If you want to see if there are top grossing movies in a certain year, please type 'year_' followed by the year you want. Ex: 'year_#{Time.now.year}'"
+    puts "Which movie would you like more info on?" .colorize(:green)
+    puts "Input a number (1-50) or type 'exit' to quit.".colorize(:green)
+    puts "Or if you want to see if there are top grossing movies in a certain year, please type 'search year'".colorize(:green)
     input = gets.strip.downcase
     if input == 'exit'
       goodbye
-    elsif input == 'list'
-      list_movies
-    elsif input.include?('year_')
-      list_by_year(input)
+    elsif input == 'search year'
+      list_by_year
     elsif input.to_i > 50 || input.to_i <= 0
       puts "Invalid answer. Please enter an acceptable answer to type 'exit' to quit.".colorize(:red)
       menu
@@ -46,7 +60,7 @@ class CLI
     end
   end
 
-  def add_movie_synopsis
+  def add_movie_synopsis                                    #this method takes a long time to load, not sure how to fix...
     Movie.all.each do |movie|
       synopsis = Scraper.movie_profile(movie.movie_profile)
       movie.add_movie_attributes(synopsis)
@@ -56,7 +70,7 @@ class CLI
   def display_movie(movie)
     puts "*********************************** #{movie.name.upcase} ***************************************".colorize(:yellow)
     puts "#{movie.name} had a gross box office sales of $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse} worldwide."
-    puts "It was released in #{movie.release_year} and currently ranks ##{movie.rank} on the list out of 50."
+    puts "It was released in #{movie.release_year} and ranks ##{movie.rank} on the list out of 50."
     puts "It is considered a(n) #{movie.genre.downcase} movie and has an MPAA rating of #{movie.rating}."
     puts "Its total runtime is #{movie.runtime}s long."
       if movie.imdb_rating >7.0
@@ -83,14 +97,6 @@ class CLI
     more
   end
 
-  def list_by_year(year)
-    Movie.all.each do |movie|
-      if movie.release_year == year.delete('year').to_i
-        display_movie(movie)
-      end
-    end
-  end
-
   def goodbye
     puts "See you next time!".colorize(:blue)
     exit
@@ -105,6 +111,9 @@ class CLI
       menu
     when "n"
       goodbye
+    else
+      puts "I don't know what you mean."
+      more
     end
   end
 

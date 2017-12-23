@@ -26,7 +26,7 @@ class Scraper
 
   def self.movie_profile(movie_profile)                                                           # scrapes the movie synopsis after opening the movie's profile page
     doc = Nokogiri::HTML(open("http://www.imdb.com#{movie_profile}"))                             # couldn't scrape synopsis from previous page so had to build this method
-    scraped_profile = []                                                                          # create a hash to store the description
+    scraped_profile = {}                                                                          # create a hash to store the description
     doc.css("div.plot_summary").each do |profile|
       scraped_profile[:synopsis] = profile.css("div.summary_text").text.gsub("\n","").strip
     end
