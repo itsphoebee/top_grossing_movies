@@ -1,11 +1,11 @@
 
 
-class Scraper
+class TopGrossingMovies::Scraper
 
   def self.scrape_movies                                                                          # grab all the movies from imdb webpage list
     doc = Nokogiri::HTML(open("http://www.imdb.com/list/ls000021718/"))    #html url
     doc.css("div.lister-item.mode-detail").each do |movie|                                        # iterate through the content to pull
-      Movie.new({                                                                         # add them into the movie array as a hash
+      TopGrossingMovies::Movie.new({                                                                         # add them into the movie array as a hash
         :rank => movie.css("span.lister-item-index.unbold.text-primary").text.gsub(/\D/,'').to_i, # movie's rank based on sales
         :name => movie.css("h3 a").text,
         :release_year => movie.css("span.lister-item-year.text-muted.unbold").text.gsub(/\D/,'').to_i,

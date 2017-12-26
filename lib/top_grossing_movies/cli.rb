@@ -11,11 +11,11 @@ class TopGrossingMovies::CLI
   end
 
     def make_movies                                     #putting everything together
-      scraped_movies = Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash          #use that hash to create new movies
+      scraped_movies = TopGrossingMovies::Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash          #use that hash to create new movies
     end
 
   def list_movies
-    Movie.all.sort_by{|movie|movie.rank}.each do |movie|
+    TopGrossingMovies::Movie.all.sort_by{|movie|movie.rank}.each do |movie|
       puts "#{movie.rank}. #{movie.name} (#{movie.release_year}) - $#{movie.sales.to_s.reverse.gsub(/(\d{3})/,"\\1,").chomp(",").reverse}"
     end
   end
@@ -24,7 +24,7 @@ class TopGrossingMovies::CLI
     puts "Which year do you want to see?"
     input = gets.strip.to_i
     count = 0
-    Movie.all.select do |movie|
+    TopGrossingMovies::Movie.all.select do |movie|
       if movie.release_year == input
         count += 1
         puts "#{movie.name} ranks ##{movie.rank} on the list"
@@ -47,7 +47,7 @@ class TopGrossingMovies::CLI
       puts "Invalid answer. Please enter an acceptable answer to type 'exit' to quit.".colorize(:red)
       menu
     else
-      movie = Movie.find(input.to_i)
+      movie = TopGrossingMovies::Movie.find(input.to_i)
       display_movie(movie)
     end
   end
@@ -57,7 +57,7 @@ class TopGrossingMovies::CLI
     input = gets.strip
     case input
     when "y"
-      synopsis = Scraper.scrape_synopsis(movie.movie_profile)
+      synopsis = TopGrossingMovies::Scraper.scrape_synopsis(movie.movie_profile)
       movie.add_movie_attributes(synopsis)
       puts "Synopsis: #{movie.synopsis}"
     else

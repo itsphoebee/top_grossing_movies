@@ -1,5 +1,5 @@
 
-class Movie
+class TopGrossingMovies::Movie
   attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank, :movie_profile, :synopsis, :genre, :imdb_rating
   @@all = []
 
