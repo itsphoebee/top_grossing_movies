@@ -1,11 +1,5 @@
 #CLI Controller
-require_relative "../top_grossing_movies/scraper.rb"
-require_relative "../top_grossing_movies/movie.rb"
-require 'nokogiri'
-require 'colorize'
-require 'pry'
-
-class CLI
+class TopGrossingMovies::CLI
 
   def call                                            #starts the program
     puts "*****************************************************************************************".colorize(:blue)
@@ -16,10 +10,9 @@ class CLI
     menu
   end
 
-  def make_movies                                     #putting everything together
-    scraped_movies = Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash
-    Movie.create_from_array(scraped_movies)           #use that hash to create new movies
-  end
+    def make_movies                                     #putting everything together
+      scraped_movies = Scraper.scrape_movies            #call Scraper's scrape movie method to receive hash          #use that hash to create new movies
+    end
 
   def list_movies
     Movie.all.sort_by{|movie|movie.rank}.each do |movie|
@@ -64,7 +57,8 @@ class CLI
     input = gets.strip
     case input
     when "y"
-      movie.add_movie_attributes
+      synopsis = Scraper.scrape_synopsis(movie.movie_profile)
+      movie.add_movie_attributes(synopsis)
       puts "Synopsis: #{movie.synopsis}"
     else
       puts "Okay. Let's move on."

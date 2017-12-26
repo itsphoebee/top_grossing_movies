@@ -1,4 +1,4 @@
-require 'pry'
+
 class Movie
   attr_accessor :name, :release_year, :sales, :rating, :runtime, :rank, :movie_profile, :synopsis, :genre, :imdb_rating
   @@all = []
@@ -8,10 +8,6 @@ class Movie
     @@all << self                                             # add to all movies array to store
   end
 
-  def self.create_from_array(movies_list)
-    movies_list.each do |movie| movie = self.new(movie)       #create a new movie based on array list
-    end
-  end
 
   def self.all                                                #call array of stored movies
     @@all
@@ -21,9 +17,7 @@ class Movie
     self.all.detect {|movie| movie.rank == n.to_i}
   end
 
-  def add_movie_attributes
-    doc = Nokogiri::HTML(open("http://www.imdb.com#{self.movie_profile}"))
-    summary = doc.css("div.plot_summary div.summary_text").text.gsub("\n","").strip
-    self.synopsis = summary
+  def add_movie_attributes(desc)
+    self.synopsis = desc
   end
 end
